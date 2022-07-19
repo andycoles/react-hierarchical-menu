@@ -13,12 +13,10 @@ export interface Node {
 export type LevelData = Node | Node[] | undefined;
 
 export interface LevelProps {
-  node: LevelData | undefined;
+  levelData: LevelData | undefined;
   onNextLevelClick?(id: ID): void;
-  // so as not to conflict with inline width
-  widthVal: string;
 }
 
-export interface HierarchicalMenuProps {
+export interface HierarchicalMenuParameters {
   menuTree: LevelData;
 }

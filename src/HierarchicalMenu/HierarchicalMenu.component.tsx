@@ -26,20 +26,20 @@ const MenuButton = ({ onClick, children, ...restProps }: MenuButtonProps) => {
 
 const LevelComponent = ({
   node,
-  onSelectLevel = () => {},
+  onNextLevelClick = () => {},
   widthVal,
 }: LevelProps) => {
   let topLevel;
   if (!node) return null;
   if (Array.isArray(node)) {
     topLevel = node.map((node) => (
-      <MenuButton data-node-id={node.id} onClick={onSelectLevel} key={node.id}>
+      <MenuButton onClick={() => { onNextLevelClick(node.id) }} key={node.id}>
         {node.nodeData.label}
       </MenuButton>
     ));
   } else {
     topLevel = (
-      <MenuButton data-node-id={node.id} onClick={onSelectLevel}>
+      <MenuButton onClick={() => { onNextLevelClick(node.id) }}>
         {node.nodeData.label}
       </MenuButton>
     );
@@ -63,8 +63,7 @@ const HierarchicalMenu = ({ menuTree }: HierarchicalMenuProps) => {
 
   const widths = calcWidths(undefined, currLevelData, nextLevelData);
 
-  const loadNextLevel = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const clickedNodeId = e.currentTarget?.dataset?.nodeId || '0';
+  const loadNextLevel = (clickedNodeId: ID) => {
     let nextLevel: LevelData;
     if (Array.isArray(currLevelData)) {
       nextLevel = currLevelData.find(
@@ -84,7 +83,6 @@ const HierarchicalMenu = ({ menuTree }: HierarchicalMenuProps) => {
   };
 
   const handleTransitionEnd = () => {
-    console.log('trans end');
     let currLevel: LevelData;
     if (Array.isArray(currLevelData)) {
       currLevel = currLevelData.find(
@@ -117,7 +115,7 @@ const HierarchicalMenu = ({ menuTree }: HierarchicalMenuProps) => {
         <LevelComponent
           widthVal={widths.levelWidth}
           node={currLevelData}
-          onSelectLevel={loadNextLevel}
+          onNextLevelClick={loadNextLevel}
         />
         <LevelComponent widthVal={widths.levelWidth} node={nextLevelData} />
       </StyledLevelsContainer>
